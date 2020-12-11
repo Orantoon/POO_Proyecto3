@@ -27,7 +27,11 @@ public class Client {
     }
 
     public void receiveJSON() throws IOException {
-        received = (JSONObject) JSONObject.stringToValue(input.readUTF());
+        String str = input.readUTF();
+        System.out.println(str);
+
+        received = new JSONObject(str);
+        System.out.println(received.getString("Consola"));
     }
 
     public void close(){
@@ -47,9 +51,10 @@ public class Client {
         try {
             Client client = new Client();
 
-            //while (client.socket.isConnected()){
-            //    System.out.println("Yay");
-            //}
+            JSONObject OBJ = new JSONObject();
+            OBJ.put("Control","arriba");
+            client.sendJSON(OBJ);
+
         } catch (IOException e) {e.printStackTrace();}
     }
 }

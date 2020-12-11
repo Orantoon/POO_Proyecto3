@@ -30,7 +30,11 @@ public class ServerConsole {
     }
 
     public void receiveJSON() throws IOException {
-        received = (JSONObject) JSONObject.stringToValue(input.readUTF());
+        String str = input.readUTF();
+        System.out.println(str);
+
+        received = new JSONObject(str);
+        System.out.println(received.getString("Control"));
     }
 
     public void close(){
@@ -52,9 +56,7 @@ public class ServerConsole {
         try {
             ServerConsole server = new ServerConsole();
 
-            //while (server.client.isConnected()){
-            //    System.out.println("Yay");
-            //}
+            server.receiveJSON();
         } catch (IOException e) {e.printStackTrace();}
     }
 }
