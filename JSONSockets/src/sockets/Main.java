@@ -5,7 +5,6 @@ import java.io.IOException;
 public class Main extends ServerConsole{
     public void receiveControl(Main principal) throws IOException {
         principal.receiveJSON();
-        //System.out.println(principal.getReceived().get("Control"));
     }
 
     public Main() throws IOException, InterruptedException {super();}

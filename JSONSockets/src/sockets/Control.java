@@ -21,11 +21,10 @@ public class Control extends Client {
         public void keyReleased(KeyEvent e) {
             oldKey = key;
             key = e.getKeyChar();
-            try {
-                send();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+
+            try {send();}
+            catch (IOException ioException) {ioException.printStackTrace();}
+
             System.out.println(key);
         }
     };
@@ -42,7 +41,6 @@ public class Control extends Client {
             Obj.put("Control", Character.valueOf(key));
 
             this.sendJSON(Obj);
-            //System.out.println(Obj.get("Control"));
         }
     }
 
