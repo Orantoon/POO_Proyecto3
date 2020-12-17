@@ -52,8 +52,5 @@ public class Controller {
 
     public static void main(String[] args) throws IOException{
         Controller controller = new Controller();
-        //while (controller.client.getSocket().isConnected()){
-        //    //controller.send();
-        //}
     }
 }

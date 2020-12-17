@@ -28,7 +28,6 @@ public class Tetris {
         client = new Client(420);
     }
 
-
     public static void main(String[] args) throws IOException{
         Tetris main = new Tetris();
         while (main.server.getClient().isConnected()){
@@ -40,7 +39,7 @@ public class Tetris {
                 case 'a'->main.send("Red",new int[]{1,1});
                 case 's'->main.send("Green",new int[]{2,2});
                 case 'd'->main.send("Purple",new int[]{3,3});
-                case ' '->main.send("Black",new int[]{4,4});
+                case ' '->main.send("Blue",new int[]{4,4});
             }
         }
     }
