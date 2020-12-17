@@ -8,7 +8,7 @@ import java.io.*;
 
 public class Controller {
     private final Client client;
-    private char key = 'p', oldKey = 'p';
+    private char key = 'p';
 
     KeyListener keyListener = new KeyListener() {
         @Override
@@ -16,7 +16,6 @@ public class Controller {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            oldKey = key;
             key = e.getKeyChar();
 
             if (key == 'a' || key == 'w' || key == 's' || key == 'd' || key == ' '){
@@ -31,11 +30,9 @@ public class Controller {
     };
 
     public void send() throws IOException{
-        if (key!= oldKey || key == ' '){
-            JSONObject Obj = new JSONObject();
-            Obj.put("Key", key);
-            client.sendJSON(Obj);
-        }
+        JSONObject Obj = new JSONObject();
+        Obj.put("Key", key);
+        client.sendJSON(Obj);
     }
 
     public Controller() throws IOException {
@@ -55,8 +52,8 @@ public class Controller {
 
     public static void main(String[] args) throws IOException{
         Controller controller = new Controller();
-        while (controller.client.getSocket().isConnected()){
-            controller.send();
-        }
+        //while (controller.client.getSocket().isConnected()){
+        //    //controller.send();
+        //}
     }
 }
