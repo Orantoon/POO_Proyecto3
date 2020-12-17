@@ -10,7 +10,7 @@ public class Client extends BasicSocket{
     public Socket getClient() {return socket;}
 
     public void start(int port) throws IOException {
-        socket = new Socket("localhost",935);
+        socket = new Socket("localhost",port);
         this.setInput(new DataInputStream(socket.getInputStream()));
         this.setOutput(new DataOutputStream(socket.getOutputStream()));
     }
