@@ -7,10 +7,7 @@ import java.awt.event.KeyListener;
 import java.io.*;
 
 public class Controller {
-    private Client client;
-
-    private JFrame frame = new JFrame();
-    private final ImageIcon background = new ImageIcon("image/wasd.png");
+    private final Client client;
     private char key = 'p', oldKey = 'p';
 
     KeyListener keyListener = new KeyListener() {
@@ -34,7 +31,7 @@ public class Controller {
     };
 
     public void send() throws IOException{
-        if (key!= oldKey){
+        if (key!= oldKey || key == ' '){
             JSONObject Obj = new JSONObject();
             Obj.put("Key", key);
             client.sendJSON(Obj);
@@ -44,11 +41,13 @@ public class Controller {
     public Controller() throws IOException {
         client = new Client(935);
 
+        JFrame frame = new JFrame();
         frame.setTitle("Controller");
         frame.setSize(210,210);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        ImageIcon background = new ImageIcon("image/wasd.png");
         frame.add(new JLabel(background));
         frame.addKeyListener(keyListener);
         frame.setVisible(true);

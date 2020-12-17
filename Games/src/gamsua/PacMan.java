@@ -3,7 +3,7 @@ package gamsua;
 import java.io.IOException;
 
 public class PacMan {
-    private Server server;
+    private final Server server;
 
     public void controllerJSON() throws IOException {
         server.receiveJSON();
