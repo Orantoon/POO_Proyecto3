@@ -10,7 +10,7 @@ public class Controller {
     private Client client;
 
     private JFrame frame = new JFrame();
-    private final ImageIcon background = new ImageIcon("image/ControlBackground.jpg");
+    private final ImageIcon background = new ImageIcon("image/wasd.png");
     private char key = 'p', oldKey = 'p';
 
     KeyListener keyListener = new KeyListener() {
@@ -45,7 +45,7 @@ public class Controller {
         client = new Client(935);
 
         frame.setTitle("Controller");
-        frame.setSize(310,310);
+        frame.setSize(210,210);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
