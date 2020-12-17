@@ -8,7 +8,9 @@ import java.io.*;
 
 public class Controller {
     private Client client;
+
     private JFrame frame = new JFrame();
+    private final ImageIcon background = new ImageIcon("image/ControlBackground.jpg");
     private char key = 'p', oldKey = 'p';
 
     KeyListener keyListener = new KeyListener() {
@@ -41,6 +43,13 @@ public class Controller {
 
     public Controller() throws IOException {
         client = new Client(935);
+
+        frame.setTitle("Controller");
+        frame.setSize(310,310);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.add(new JLabel(background));
         frame.addKeyListener(keyListener);
         frame.setVisible(true);
     }
