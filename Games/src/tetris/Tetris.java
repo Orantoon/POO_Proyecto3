@@ -6,10 +6,12 @@ import org.json.*;
 import java.io.IOException;
 
 public class Tetris {
+    //Attributes
     private Server server;
     private Client client;
     private int key = 0;
 
+    //Game Loop
     public Tetris() throws IOException {
         server = new Server(935);
         client = new Client(420);
@@ -19,14 +21,16 @@ public class Tetris {
 
             //To test the screen
             switch (key){
-                case 'w'->send("Yellow",new int[]{0,0});
-                case 'a'->send("Red",new int[]{1,1});
-                case 's'->send("Green",new int[]{2,2});
-                case 'd'->send("Purple",new int[]{3,3});
-                case ' '->send("Blue",new int[]{4,4});
+                case 'w'->send("Yellow",new int[][]{{0,0}});
+                case 'a'->send("Red",new int[][]{{1,1}});
+                case 's'->send("Green",new int[][]{{2,2}});
+                case 'd'->send("Purple",new int[][]{{3,3}});
+                case ' '->send("Blue",new int[][]{{4,4}});
             }
         }
     }
+
+    // / / / / / Socket Communication / / / / / //
 
     public void controllerJSON() throws IOException {
         server.receiveJSON();
@@ -35,10 +39,13 @@ public class Tetris {
         System.out.println(key);
     }
 
-    public void send(String color, int[] coord) throws IOException {
+    public void send(String color, int[][] coord) throws IOException {
         JSONObject Obj = new JSONObject();
         JSONArray array = new JSONArray();
-        array.put(coord);
+
+        for (int[] c: coord)
+            array.put(c);
+
         Obj.put(color,array);
         client.sendJSON(Obj);
     }
