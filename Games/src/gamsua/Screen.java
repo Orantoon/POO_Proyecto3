@@ -17,7 +17,7 @@ public class Screen {
     private int[][] matrix;
 
     //0 Black, 1 Light Blue, 2 Yellow, 3 Blue, 4 Orange, 5 Purple, 6 Red, 7 Green, 8 Gray, 9 White
-    private final ImageIcon colors[] = new ImageIcon[10];
+    private final ImageIcon[] colors = new ImageIcon[10];
 
     public Screen() throws IOException {
         server = new Server(420);
@@ -94,19 +94,17 @@ public class Screen {
 
     public void initColors(){
         for (int i = 0; i < 10; i++)
-            colors[i] = new ImageIcon("images/"+i+".png");
+            colors[i] = new ImageIcon("image/"+i+".png");
     }
 
     public void updateScreen(){
-        Iterator<String> keys = received.keys();
+        Iterator keys = received.keys();
         while (keys.hasNext()){
-            String key = keys.next();
+            String key = String.valueOf(keys.next());
             JSONArray array = received.getJSONArray(key);
 
             int color = -1;
-
             //0 Black, 1 Light Blue, 2 Yellow, 3 Blue, 4 Orange, 5 Purple, 6 Red, 7 Green, 8 Gray, 9 White
-
 
             switch (key){
                 case "Black"  -> color = 0;
@@ -131,17 +129,19 @@ public class Screen {
     }
 
     public void updateFrame(){
-        frame.getContentPane().removeAll();
-        panel.removeAll();
+        //frame.getContentPane().removeAll();
+        //panel.removeAll();
 
         for (int r = 0; r < 50; r++){
             for (int c = 0; c < 50; c++){
 
+                if (matrix[r][c] == 0)
+                    continue;
+
                 JLabel label = new JLabel();
-                label.setBounds(c*12,r*12,12,12);
 
                 switch (matrix[r][c]){
-                    case 0 -> label.setIcon(colors[0]);
+                    //case 0 -> label.setIcon(colors[0]);
                     case 1 -> label.setIcon(colors[1]);
                     case 2 -> label.setIcon(colors[2]);
                     case 3 -> label.setIcon(colors[3]);
@@ -153,13 +153,16 @@ public class Screen {
                     case 9 -> label.setIcon(colors[9]);
                 }
 
-                panel.add(label);
-                frame.add(panel);
+                label.setBounds(c*12,r*12,12,12);
 
-                frame.revalidate();
-                frame.repaint();
+                panel.add(label);
             }
         }
+
+        frame.add(panel);
+
+        //frame.revalidate();
+        frame.repaint();
     }
 
     public void setColor(int r, int c, int color){matrix[r][c] = color;}
@@ -168,6 +171,7 @@ public class Screen {
     public void gameJSON() throws IOException{
         server.receiveJSON();
         received = server.getReceived();
+        System.out.println(received.toString());
     }
 
     public static void main(String[] args) throws IOException{
