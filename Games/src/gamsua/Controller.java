@@ -51,6 +51,6 @@ public class Controller {
     }
 
     public static void main(String[] args) throws IOException{
-        Controller controller = new Controller();
+        new Controller();
     }
 }

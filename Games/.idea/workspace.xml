@@ -106,7 +106,7 @@
       <module name="Games" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="gamsua.*" />
+          <option name="PATTERN" value="tetris.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -128,7 +128,7 @@
       <module name="Games" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="gamsua.*" />
+          <option name="PATTERN" value="tetris.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -137,11 +137,11 @@
       </method>
     </configuration>
     <configuration name="Tetris" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="gamsua.Tetris" />
+      <option name="MAIN_CLASS_NAME" value="tetris.Tetris" />
       <module name="Games" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="gamsua.*" />
+          <option name="PATTERN" value="tetris.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

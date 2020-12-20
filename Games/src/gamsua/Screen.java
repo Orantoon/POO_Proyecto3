@@ -1,12 +1,10 @@
 package gamsua;
 
 import org.json.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Iterator;
-
 
 public class Screen {
     private final Server server;
@@ -35,6 +33,11 @@ public class Screen {
         panel.setBounds(0,0,600+10,600+10);
         panel.setLayout(null);
         panel.setBackground(Color.BLACK);
+
+        while (server.getClient().isConnected()){
+            gameJSON();
+            updateScreen();
+        }
     }
 
     public void initMatrix(){
@@ -124,13 +127,12 @@ public class Screen {
                 int r = arr.getInt(0), c = arr.getInt(1);
                 setColor(r,c,color);
             }
-        }
-        updateFrame();
+        } updateFrame();
     }
 
     public void updateFrame(){
-        //frame.getContentPane().removeAll();
-        //panel.removeAll();
+        frame.getContentPane().removeAll();
+        panel.removeAll();
 
         for (int r = 0; r < 50; r++){
             for (int c = 0; c < 50; c++){
@@ -175,10 +177,6 @@ public class Screen {
     }
 
     public static void main(String[] args) throws IOException{
-        Screen screen = new Screen();
-        while (screen.server.getClient().isConnected()){
-            screen.gameJSON();
-            screen.updateScreen();
-        }
+        new Screen();
     }
 }

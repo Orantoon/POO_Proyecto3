@@ -1,5 +1,7 @@
-package gamsua;
+package tetris;
 
+import gamsua.Client;
+import gamsua.Server;
 import org.json.*;
 import java.io.IOException;
 
@@ -7,6 +9,24 @@ public class Tetris {
     private Server server;
     private Client client;
     private int key = 0;
+
+    public Tetris() throws IOException {
+        server = new Server(935);
+        client = new Client(420);
+
+        while (server.getClient().isConnected()){
+            controllerJSON();
+
+            //To test the screen
+            switch (key){
+                case 'w'->send("Yellow",new int[]{0,0});
+                case 'a'->send("Red",new int[]{1,1});
+                case 's'->send("Green",new int[]{2,2});
+                case 'd'->send("Purple",new int[]{3,3});
+                case ' '->send("Blue",new int[]{4,4});
+            }
+        }
+    }
 
     public void controllerJSON() throws IOException {
         server.receiveJSON();
@@ -23,24 +43,7 @@ public class Tetris {
         client.sendJSON(Obj);
     }
 
-    public Tetris() throws IOException {
-        server = new Server(935);
-        client = new Client(420);
-    }
-
     public static void main(String[] args) throws IOException{
-        Tetris main = new Tetris();
-        while (main.server.getClient().isConnected()){
-            main.controllerJSON();
-
-            //To test the screen
-            switch (main.key){
-                case 'w'->main.send("Yellow",new int[]{0,0});
-                case 'a'->main.send("Red",new int[]{1,1});
-                case 's'->main.send("Green",new int[]{2,2});
-                case 'd'->main.send("Purple",new int[]{3,3});
-                case ' '->main.send("Blue",new int[]{4,4});
-            }
-        }
+        new Tetris();
     }
 }
