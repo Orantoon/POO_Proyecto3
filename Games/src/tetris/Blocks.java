@@ -61,7 +61,7 @@ public class Blocks {
         }
     }
 
-    public void moveLeft(){
+    public void moveLeft(int[][] matrix){
         for (int[] coord: coordinates){
             if (coord[1] == 0)
                 return;
@@ -75,7 +75,7 @@ public class Blocks {
         }
     }
 
-    public void moveRight(){
+    public void moveRight(int[][] matrix){
         for (int[] coord: coordinates){
             if (coord[1] == 11)
                 return;
@@ -89,7 +89,7 @@ public class Blocks {
         }
     }
 
-    public void moveDown(){
+    public void moveDown(int[][] matrix){
         for (int[] coord: coordinates){
             if (coord[0] == 23)
                 return;

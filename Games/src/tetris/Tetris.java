@@ -6,7 +6,7 @@ import org.json.*;
 import java.io.IOException;
 import java.util.*;
 
-public class Tetris {
+public class Tetris implements Runnable{ ////////////////////////////////////////
     //Attributes
     private Server server;
     private Client client;
@@ -15,12 +15,13 @@ public class Tetris {
     private int[][] matrix;
     private boolean running = true;
     private Random random = new Random();
+    private Thread thread = new Thread(this); ////////////////////////////////////////
 
     private Vector<Blocks> blocks = new Vector<>();
     private String[] blockNames = new String[]{"i","o","j","l","t","s","z"};
 
     //Game Loop
-    public Tetris() throws IOException {
+    public Tetris() throws IOException, InterruptedException {
         server = new Server(935);
         client = new Client(420);
 
@@ -28,22 +29,37 @@ public class Tetris {
         emptyBoard();
         addPiece();
         paintPiece();
+        thread.start(); ////////////////////////////////////////
 
         while (server.getClient().isConnected() && running){
-            controllerJSON();
-
-            switch (key){
-                case 'w', ' ' -> movePiece("rotate");
-                case 'a' -> movePiece("left");
-                case 's' -> movePiece("down"); //STRAIGHT DOWN
-                case 'd' -> movePiece("right");
-            }
+            Thread.sleep(500);
+            movePiece("down");
         }
 
         System.out.println("You lost!");
         server.close();
         client.close();
         //Close all the sockets and the apps
+    }
+
+    @Override
+    public void run() { ////////////////////////////////////////
+        try {
+            while (server.getClient().isConnected() && running){
+                controllerJSON();
+
+                switch (key){
+                    case 'w', ' ' -> movePiece("rotate");
+                    case 'a' -> movePiece("left");
+                    case 's' -> movePiece("down"); //STRAIGHT DOWN
+                    case 'd' -> movePiece("right");
+                }
+            }
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
     }
 
     public void initMatrix(){
@@ -180,9 +196,9 @@ public class Tetris {
 
     public void movePiece(String direction) throws IOException {
         switch (direction){
-            case "left"  -> blocks.lastElement().moveLeft();
-            case "right" -> blocks.lastElement().moveRight();
-            case "down"  -> blocks.lastElement().moveDown();
+            case "left"  -> blocks.lastElement().moveLeft(matrix);
+            case "right" -> blocks.lastElement().moveRight(matrix);
+            case "down"  -> blocks.lastElement().moveDown(matrix);
             case "rotate" -> blocks.lastElement().rotate(matrix);
         }
 
@@ -283,7 +299,7 @@ public class Tetris {
     }
 
     // Main
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, InterruptedException {
         new Tetris();
     }
 }
