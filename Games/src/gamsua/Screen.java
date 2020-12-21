@@ -128,6 +128,7 @@ public class Screen {
                 setColor(r,c,color);
             }
         } updateFrame();
+        printMatrix();
     }
 
     public void updateFrame(){
@@ -168,7 +169,14 @@ public class Screen {
     }
 
     public void setColor(int r, int c, int color){matrix[r][c] = color;}
-    //clearLeftBehind?
+
+    public void printMatrix(){
+        for (int i = 0; i < 50; i++){
+            for (int j = 0; j < 50;j++){
+                System.out.print(matrix[i][j]);
+            } System.out.println();
+        } System.out.println();
+    }
 
     public void gameJSON() throws IOException{
         server.receiveJSON();
