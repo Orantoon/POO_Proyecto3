@@ -12,6 +12,8 @@ public class PacMan implements Runnable {
     private final Server server;
     private final Client client;
     private final Thread thread = new Thread(this);
+    private int key;
+    private int currentKey;
 
     // Game
     private final int[][] map;
@@ -364,49 +366,9 @@ public class PacMan implements Runnable {
 
     @Override
     public void run() {
-        int currentKey = 'a';
-        int key;
-        int lastCode = 0;
-
         try {
             while (server.getClient().isConnected()){
                 key = controllerJSON();
-
-                if (validKey(key) && currentKey != key){
-                    currentKey = key;
-                }
-
-                // A button is pressed
-                switch (currentKey) {
-                    case 'w' -> {
-                        if (!canMove(1)){
-                            break;
-                        }
-
-                        code = 1;
-                    }
-                    case 'a' -> {
-                        if (!canMove(4)){
-                            break;
-                        }
-
-                        code = 4;
-                    }
-                    case 's' -> {
-                        if (!canMove(3)){
-                            break;
-                        }
-
-                        code = 3;
-                    }
-                    case 'd' -> {
-                        if (!canMove(2)){
-                            break;
-                        }
-
-                        code = 2;
-                    }
-                }
             }
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -422,10 +384,49 @@ public class PacMan implements Runnable {
         main.movePlayer();   // Initializes Player
         main.thread.start();
 
+        main.currentKey = 'a';
+        main.key = 'a';
+
         while (main.server.getClient().isConnected()){
             Thread.sleep(100);
             if (main.canMove(main.code)){
                 main.movePlayer();
+            }
+
+            if (main.validKey(main.key) && main.currentKey != main.key){
+                main.currentKey = main.key;
+            }
+
+            // A button is pressed
+            switch (main.currentKey) {
+                case 'w' -> {
+                    if (!main.canMove(1)){
+                        break;
+                    }
+
+                    main.code = 1;
+                }
+                case 'a' -> {
+                    if (!main.canMove(4)){
+                        break;
+                    }
+
+                    main.code = 4;
+                }
+                case 's' -> {
+                    if (!main.canMove(3)){
+                        break;
+                    }
+
+                    main.code = 3;
+                }
+                case 'd' -> {
+                    if (!main.canMove(2)){
+                        break;
+                    }
+
+                    main.code = 2;
+                }
             }
 
             //To test the screen
