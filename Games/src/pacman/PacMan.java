@@ -8,14 +8,14 @@ import gamsua.Server;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class PacMan {
+public class PacMan implements Runnable {
     private final Server server;
     private final Client client;
-    private int key;
+    private final Thread thread = new Thread(this);
 
     // Game
     private final int[][] map;
-    private int[][] dots;
+    private final int[][] dots;
 
     private int[] currentPos;
     private int[] lastPos;
@@ -27,7 +27,6 @@ public class PacMan {
     public PacMan() throws IOException {
         server = new Server(935);
         client = new Client(420);
-        key = 0;
 
         // Game
         map = new int[][] {{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0},{11,0},{12,0},{13,0},{14,0},{15,0},{16,0},{17,0},{18,0},{19,0},{20,0},{21,0},{22,0},{23,0},{24,0},{25,0},{26,0},{27,0},{28,0},{29,0},{30,0},{31,0},{32,0},{33,0},{34,0},{35,0},{36,0},{37,0},{38,0},{39,0},{40,0},{41,0},{42,0},{43,0},{44,0},{45,0},{46,0},{47,0},{48,0},{49,0},
@@ -112,11 +111,19 @@ public class PacMan {
     }
 
 
-    public void controllerJSON() throws IOException {
+    public int controllerJSON() throws IOException {
         server.receiveJSON();
         System.out.println(server.getReceived().toString());
-        key = server.getReceived().getInt("Key");
+        int key = server.getReceived().getInt("Key");
         System.out.println(key);
+        return key;
+    }
+
+    public boolean validKey(int key){
+        return switch (key) {
+            case 'a', 's', 'd', 'w', ' ' -> true;
+            default -> false;
+        };
     }
 
     public void send(String color, int[][] coords) throws IOException {
@@ -193,67 +200,67 @@ public class PacMan {
             this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]}});
             return;
         }
-        switch (code){
-            case 1:
-                if (currentPos[1]+1 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]+1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]+1}});
+        switch (code) {
+            case 1 -> {
+                if (currentPos[1] + 1 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] + 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 3, currentPos[1] + 1}});
                 }
-                if (currentPos[1]+2 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]+2}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]+2}});
+                if (currentPos[1] + 2 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] + 2}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] + 2}});
                 }
-                if (currentPos[1]-1 >= 0){
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]-1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]-1}});
+                if (currentPos[1] - 1 >= 0) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] - 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] - 1}});
                 }
-                this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]}});
-                this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]}});
-                break;
-            case 2:
-                if (currentPos[1]+1 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0],currentPos[1]+1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]+1}});
+                this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1]}});
+                this.send("Yellow", new int[][]{{currentPos[0] + 3, currentPos[1]}});
+            }
+            case 2 -> {
+                if (currentPos[1] + 1 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0], currentPos[1] + 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 3, currentPos[1] + 1}});
                 }
-                if (currentPos[1]-1 >= 0){
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]-1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]-1}});
+                if (currentPos[1] - 1 >= 0) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] - 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] - 1}});
                 }
-                this.send("Yellow",new int[][]{currentPos});
-                this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]}});
-                this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]}});
-                this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]}});
-                break;
-            case 3:
-                if (currentPos[1]+1 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0],currentPos[1]+1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]+1}});
+                this.send("Yellow", new int[][]{currentPos});
+                this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1]}});
+                this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1]}});
+                this.send("Yellow", new int[][]{{currentPos[0] + 3, currentPos[1]}});
+            }
+            case 3 -> {
+                if (currentPos[1] + 1 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0], currentPos[1] + 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] + 1}});
                 }
-                if (currentPos[1]+2 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]+2}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]+2}});
+                if (currentPos[1] + 2 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] + 2}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] + 2}});
                 }
-                if (currentPos[1]-1 >= 0){
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]-1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]-1}});
+                if (currentPos[1] - 1 >= 0) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] - 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] - 1}});
                 }
-                this.send("Yellow",new int[][]{currentPos});
-                this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]}});
-                break;
-            case 4:
-                if (currentPos[1]+1 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0],currentPos[1]+1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]+1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]+1}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]+1}});
+                this.send("Yellow", new int[][]{currentPos});
+                this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1]}});
+            }
+            case 4 -> {
+                if (currentPos[1] + 1 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0], currentPos[1] + 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] + 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] + 1}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 3, currentPos[1] + 1}});
                 }
-                if (currentPos[1]+2 <= 49){
-                    this.send("Yellow",new int[][]{{currentPos[0]+1,currentPos[1]+2}});
-                    this.send("Yellow",new int[][]{{currentPos[0]+2,currentPos[1]+2}});
+                if (currentPos[1] + 2 <= 49) {
+                    this.send("Yellow", new int[][]{{currentPos[0] + 1, currentPos[1] + 2}});
+                    this.send("Yellow", new int[][]{{currentPos[0] + 2, currentPos[1] + 2}});
                 }
-                this.send("Yellow",new int[][]{currentPos});
-                this.send("Yellow",new int[][]{{currentPos[0]+3,currentPos[1]}});
-                break;
+                this.send("Yellow", new int[][]{currentPos});
+                this.send("Yellow", new int[][]{{currentPos[0] + 3, currentPos[1]}});
+            }
         }
     }
 
@@ -354,41 +361,71 @@ public class PacMan {
 
     }
 
-    public static void main(String[] args) throws IOException{
+
+    @Override
+    public void run() {
+        int currentKey = 'a';
+        int key;
+        int lastCode = 0;
+
+        try {
+            while (server.getClient().isConnected()){
+                key = controllerJSON();
+
+                if (validKey(key) && currentKey != key){
+                    currentKey = key;
+                }
+
+                // A button is pressed
+                switch (currentKey) {
+                    case 'w' -> {
+                        if (!canMove(1)){
+                            break;
+                        }
+
+                        code = 1;
+                    }
+                    case 'a' -> {
+                        if (!canMove(4)){
+                            break;
+                        }
+
+                        code = 4;
+                    }
+                    case 's' -> {
+                        if (!canMove(3)){
+                            break;
+                        }
+
+                        code = 3;
+                    }
+                    case 'd' -> {
+                        if (!canMove(2)){
+                            break;
+                        }
+
+                        code = 2;
+                    }
+                }
+            }
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+
+    public static void main(String[] args) throws IOException, InterruptedException {
         PacMan main = new PacMan();
 
         main.drawMap();
         main.drawDots();
         main.movePlayer();   // Initializes Player
+        main.thread.start();
 
         while (main.server.getClient().isConnected()){
-            main.controllerJSON();
-
+            Thread.sleep(100);
             if (main.canMove(main.code)){
                 main.movePlayer();
-            }
-
-            switch (main.key){  // A button is pressed
-                case 'w':
-                    if (main.canMove(1)){
-                        main.code = 1;
-                    }
-                    break;
-                case 'a':
-                    if (main.canMove(4)){
-                        main.code = 4;
-                    }
-                    break;
-                case 's':
-                    if (main.canMove(3)){
-                        main.code = 3;
-                    }
-                    break;
-                case 'd':
-                    if (main.canMove(2)){
-                        main.code = 2;
-                    }
-                    break;
             }
 
             //To test the screen
@@ -400,5 +437,8 @@ public class PacMan {
                 case ' '->main.send("Blue",new int[]{4,4});
             }*/
         }
+
+        main.server.close();
+        main.client.close();
     }
 }

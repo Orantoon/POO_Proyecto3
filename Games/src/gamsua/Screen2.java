@@ -1,43 +1,21 @@
 package gamsua;
 
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.util.Iterator;
 
-public class Screen{
+public class Screen2 {
     private final Server server;
-    private final JFrame frame = new JFrame();
-    private final JPanel panel = new JPanel();
     private JSONObject received;
 
     private int[][] matrix;
 
-    //0 Black, 1 Light Blue, 2 Yellow, 3 Blue, 4 Orange, 5 Purple, 6 Red, 7 Green, 8 Gray, 9 White
-    private final ImageIcon[] colors = new ImageIcon[10];
 
-    public Screen() throws IOException {
-        server = new Server(421);   // 421 =======================
-
-        frame.setTitle("Screen");
-        frame.setSize(600+14,600+35);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        initMatrix();
-        initColors();
-
-        panel.setBounds(0,0,600+10,600+10);
-        panel.setLayout(null);
-        panel.setBackground(Color.BLACK);
-
-        while (server.getClient().isConnected()){
-            gameJSON();
-            updateScreen();
-        }
+    public Screen2() throws IOException {
+        server = new Server(420);
     }
 
     public void initMatrix(){
@@ -95,12 +73,13 @@ public class Screen{
         };
     }
 
-    public void initColors(){
-        for (int i = 0; i < 10; i++)
-            colors[i] = new ImageIcon("image/"+i+".png");
+    public void gameJSON() throws IOException{
+        server.receiveJSON();
+        received = server.getReceived();
+        System.out.println(received.toString());
     }
 
-    public void updateScreen(){
+    public void updateScreen(JFrame frame,Draw d){
         Iterator keys = received.keys();
         while (keys.hasNext()){
             String key = String.valueOf(keys.next());
@@ -125,66 +104,32 @@ public class Screen{
             for (int i = 0; i < array.length(); i++){
                 JSONArray arr = array.getJSONArray(i);
                 int r = arr.getInt(0), c = arr.getInt(1);
-                setColor(r,c,color);
-            }
-        } updateFrame();
-        printMatrix();
-    }
-
-    public void updateFrame(){
-        frame.getContentPane().removeAll();
-        panel.removeAll();
-
-        for (int r = 0; r < 50; r++){
-            for (int c = 0; c < 50; c++){
-
-                if (matrix[r][c] == 0)
-                    continue;
-
-                JLabel label = new JLabel();
-
-                switch (matrix[r][c]){
-                    //case 0 -> label.setIcon(colors[0]);
-                    case 1 -> label.setIcon(colors[1]);
-                    case 2 -> label.setIcon(colors[2]);
-                    case 3 -> label.setIcon(colors[3]);
-                    case 4 -> label.setIcon(colors[4]);
-                    case 5 -> label.setIcon(colors[5]);
-                    case 6 -> label.setIcon(colors[6]);
-                    case 7 -> label.setIcon(colors[7]);
-                    case 8 -> label.setIcon(colors[8]);
-                    case 9 -> label.setIcon(colors[9]);
-                }
-
-                label.setBounds(c*12,r*12,12,12);
-                panel.add(label);
+                matrix[r][c] = color;
             }
         }
-
-        frame.add(panel);
-
-        //frame.revalidate();
-        frame.repaint();
+        d.initMap(matrix);
+        frame.add(d);
     }
 
-
-    public void setColor(int r, int c, int color){matrix[r][c] = color;}
-
-    public void printMatrix(){
-        for (int i = 0; i < 50; i++){
-            for (int j = 0; j < 50;j++){
-                System.out.print(matrix[i][j]);
-            } System.out.println();
-        } System.out.println();
-    }
-
-    public void gameJSON() throws IOException{
-        server.receiveJSON();
-        received = server.getReceived();
-        System.out.println(received.toString());
-    }
 
     public static void main(String[] args) throws IOException{
-        new Screen();
+        Screen2 screen = new Screen2();
+        JFrame frame = new JFrame("Screen 2");
+        Draw d = new Draw();
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600+14,600+35);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.add(d);
+
+        screen.initMatrix();
+
+        while (screen.server.getClient().isConnected()){
+            screen.gameJSON();
+            screen.updateScreen(frame,d);
+        }
     }
+
 }

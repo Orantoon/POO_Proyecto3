@@ -1,47 +1,14 @@
 package gamsua;
 
-import org.json.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.util.Iterator;
 
-public class Screen{
-    private final Server server;
-    private final JFrame frame = new JFrame();
-    private final JPanel panel = new JPanel();
-    private JSONObject received;
+public class Draw extends JPanel {
+    private int[][] map;
 
-    private int[][] matrix;
 
-    //0 Black, 1 Light Blue, 2 Yellow, 3 Blue, 4 Orange, 5 Purple, 6 Red, 7 Green, 8 Gray, 9 White
-    private final ImageIcon[] colors = new ImageIcon[10];
-
-    public Screen() throws IOException {
-        server = new Server(421);   // 421 =======================
-
-        frame.setTitle("Screen");
-        frame.setSize(600+14,600+35);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        initMatrix();
-        initColors();
-
-        panel.setBounds(0,0,600+10,600+10);
-        panel.setLayout(null);
-        panel.setBackground(Color.BLACK);
-
-        while (server.getClient().isConnected()){
-            gameJSON();
-            updateScreen();
-        }
-    }
-
-    public void initMatrix(){
-        matrix = new int[][]{
+    public Draw(){
+        map = new int[][]{
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -95,96 +62,34 @@ public class Screen{
         };
     }
 
-    public void initColors(){
-        for (int i = 0; i < 10; i++)
-            colors[i] = new ImageIcon("image/"+i+".png");
+
+    public void initMap(int[][] _map){
+        map = _map;
+        repaint();
     }
 
-    public void updateScreen(){
-        Iterator keys = received.keys();
-        while (keys.hasNext()){
-            String key = String.valueOf(keys.next());
-            JSONArray array = received.getJSONArray(key);
-
-            int color = -1;
-            //0 Black, 1 Light Blue, 2 Yellow, 3 Blue, 4 Orange, 5 Purple, 6 Red, 7 Green, 8 Gray, 9 White
-
-            switch (key){
-                case "Black"  -> color = 0;
-                case "Light Blue" -> color = 1;
-                case "Yellow" -> color = 2;
-                case "Blue"   -> color = 3;
-                case "Orange" -> color = 4;
-                case "Purple" -> color = 5;
-                case "Red"    -> color = 6;
-                case "Green"  -> color = 7;
-                case "Gray"   -> color = 8;
-                case "White"  -> color = 9;
-            }
-
-            for (int i = 0; i < array.length(); i++){
-                JSONArray arr = array.getJSONArray(i);
-                int r = arr.getInt(0), c = arr.getInt(1);
-                setColor(r,c,color);
-            }
-        } updateFrame();
-        printMatrix();
-    }
-
-    public void updateFrame(){
-        frame.getContentPane().removeAll();
-        panel.removeAll();
+    @Override
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
+        this.setBackground(Color.BLACK);
 
         for (int r = 0; r < 50; r++){
             for (int c = 0; c < 50; c++){
-
-                if (matrix[r][c] == 0)
-                    continue;
-
-                JLabel label = new JLabel();
-
-                switch (matrix[r][c]){
-                    //case 0 -> label.setIcon(colors[0]);
-                    case 1 -> label.setIcon(colors[1]);
-                    case 2 -> label.setIcon(colors[2]);
-                    case 3 -> label.setIcon(colors[3]);
-                    case 4 -> label.setIcon(colors[4]);
-                    case 5 -> label.setIcon(colors[5]);
-                    case 6 -> label.setIcon(colors[6]);
-                    case 7 -> label.setIcon(colors[7]);
-                    case 8 -> label.setIcon(colors[8]);
-                    case 9 -> label.setIcon(colors[9]);
+                System.out.println(map[r][c]);
+                switch (map[r][c]){
+                    case 0 -> g.setColor(Color.BLACK);
+                    case 1 -> g.setColor(Color.CYAN);
+                    case 2 -> g.setColor(Color.YELLOW);
+                    case 3 -> g.setColor(Color.BLUE);
+                    case 4 -> g.setColor(Color.ORANGE);
+                    case 5 -> g.setColor(Color.MAGENTA);
+                    case 6 -> g.setColor(Color.RED);
+                    case 7 -> g.setColor(Color.GREEN);
+                    case 8 -> g.setColor(Color.GRAY);
+                    case 9 -> g.setColor(Color.WHITE);
                 }
-
-                label.setBounds(c*12,r*12,12,12);
-                panel.add(label);
+                g.fillRect(c*12,r*12,12,12);
             }
         }
-
-        frame.add(panel);
-
-        //frame.revalidate();
-        frame.repaint();
-    }
-
-
-    public void setColor(int r, int c, int color){matrix[r][c] = color;}
-
-    public void printMatrix(){
-        for (int i = 0; i < 50; i++){
-            for (int j = 0; j < 50;j++){
-                System.out.print(matrix[i][j]);
-            } System.out.println();
-        } System.out.println();
-    }
-
-    public void gameJSON() throws IOException{
-        server.receiveJSON();
-        received = server.getReceived();
-        System.out.println(received.toString());
-    }
-
-    public static void main(String[] args) throws IOException{
-        new Screen();
     }
 }
