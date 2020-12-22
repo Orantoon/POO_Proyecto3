@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="6238c42f-4060-4d16-a536-a47d03365d06" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +46,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../v2/Games" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Proyecto 2/POO_Proyecto2/ZombieDefense" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -119,8 +137,8 @@
         <item itemvalue="Application.Controller" />
         <item itemvalue="Application.PacMan" />
         <item itemvalue="Application.Screen2" />
-        <item itemvalue="Application.Screen" />
         <item itemvalue="Application.Tetris" />
+        <item itemvalue="Application.Screen" />
       </list>
     </recent_temporary>
   </component>
@@ -132,7 +150,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1608164726410</updated>
-      <workItem from="1608594843758" duration="15786000" />
+      <workItem from="1608594843758" duration="38261000" />
     </task>
     <servers />
   </component>
@@ -156,25 +174,29 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1245" y="246" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1608594993564" />
-    <state x="1220" y="295" key="FileChooserDialogImpl" timestamp="1608594950039">
+    <state x="1170" y="290" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1608628542544">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="1220" y="295" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1608594950039" />
-    <state width="914" height="294" key="GridCell.Tab.0.bottom" timestamp="1608612186522">
+    <state x="1170" y="290" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1608628542544" />
+    <state x="1045" y="283" width="440" height="483" key="FileChooserDialogImpl" timestamp="1608629154512">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="914" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1608612186522" />
-    <state width="914" height="294" key="GridCell.Tab.0.center" timestamp="1608612186522">
+    <state x="1045" y="283" width="440" height="483" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1608629154512" />
+    <state width="914" height="299" key="GridCell.Tab.0.bottom" timestamp="1608666306211">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="914" height="294" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1608612186522" />
-    <state width="914" height="294" key="GridCell.Tab.0.left" timestamp="1608612186522">
+    <state width="914" height="299" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1608666306211" />
+    <state width="914" height="299" key="GridCell.Tab.0.center" timestamp="1608666306211">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="914" height="294" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1608612186522" />
-    <state width="914" height="294" key="GridCell.Tab.0.right" timestamp="1608612186522">
+    <state width="914" height="299" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1608666306211" />
+    <state width="914" height="299" key="GridCell.Tab.0.left" timestamp="1608666306211">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="914" height="294" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1608612186522" />
+    <state width="914" height="299" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1608666306211" />
+    <state width="914" height="299" key="GridCell.Tab.0.right" timestamp="1608666306211">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="914" height="299" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1608666306211" />
   </component>
 </project>
