@@ -99,6 +99,12 @@ public class Screen2 {
                 case "Green"  -> color = 7;
                 case "Gray"   -> color = 8;
                 case "White"  -> color = 9;
+                case "Clean" -> {
+                    initMatrix();
+                    d.initMap(matrix);
+                    frame.add(d);
+                    return;
+                }
             }
 
             for (int i = 0; i < array.length(); i++){
