@@ -4,17 +4,17 @@ public class Blocks {
     //Attributes
     private int num;
     private int rot = 0;
-    private int[][] oldCoord = new int[][]{{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
+    private int[][] oldCoord = new int[][]{{0,0},{0,0},{0,0},{0,0}};
     private int[][] coordinates = new int[][]{{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
 
     public Blocks(String name){
         switch (name){
             case "i" -> {
                 num = 1;
-                coordinates[0] = new int[]{0, 3};
-                coordinates[1] = new int[]{0, 4};
-                coordinates[2] = new int[]{0, 5};
-                coordinates[3] = new int[]{0, 6};
+                coordinates[0] = new int[]{0, 4};
+                coordinates[1] = new int[]{0, 5};
+                coordinates[2] = new int[]{0, 6};
+                coordinates[3] = new int[]{0, 7};
             }
             case "o" -> {
                 num = 2;
@@ -65,6 +65,9 @@ public class Blocks {
         for (int[] coord: coordinates){
             if (coord[1] == 0)
                 return;
+
+            if (matrix[coord[0]][coord[1]-1] != 0 && !isCoord(new int[]{coord[0],coord[1]-1}))
+                return;
         }
 
         for (int i = 0; i < 4; i++){
@@ -79,6 +82,9 @@ public class Blocks {
         for (int[] coord: coordinates){
             if (coord[1] == 11)
                 return;
+
+            if (matrix[coord[0]][coord[1]+1] != 0 && !isCoord(new int[]{coord[0],coord[1]+1}))
+                return;
         }
 
         for (int i = 0; i < 4; i++){
@@ -89,7 +95,7 @@ public class Blocks {
         }
     }
 
-    public void moveDown(int[][] matrix){
+    public void moveDown(){
         for (int[] coord: coordinates){
             if (coord[0] == 23)
                 return;

@@ -213,9 +213,9 @@ public class Ghost extends Thread{
 
     }
 
-    public boolean canMove(){
+    //public boolean canMove(){
 
-    }
+    //}
 
     public void freeFromCage(){
 

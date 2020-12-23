@@ -76,7 +76,7 @@ public class Screen2 {
     public void gameJSON() throws IOException{
         server.receiveJSON();
         received = server.getReceived();
-        System.out.println(received.toString());
+        //System.out.println(received.toString());
     }
 
     public void updateScreen(JFrame frame,Draw d){
@@ -114,7 +114,7 @@ public class Screen2 {
 
     public static void main(String[] args) throws IOException{
         Screen2 screen = new Screen2();
-        JFrame frame = new JFrame("Screen 2");
+        JFrame frame = new JFrame("Screen");
         Draw d = new Draw();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -27,7 +27,8 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
 
         initMatrix();
         emptyBoard();
-        addPiece();
+        addPieceToBlocks();
+        nextPiece();
         paintPiece();
         thread.start(); ////////////////////////////////////////
 
@@ -37,8 +38,13 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
         }
 
         System.out.println("You lost!");
-        server.close();
-        client.close();
+        //cleanScreen();
+        //gameOver();
+
+        while (server.getClient().isConnected()){
+            Thread.sleep(Integer.MAX_VALUE);
+        }
+
         //Close all the sockets and the apps
     }
 
@@ -91,15 +97,20 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
         };
     }
 
-    public void addPiece(){
+    //Adding Pieces
+    public void addPieceToBlocks(){
         String name = blockNames[random.nextInt(7)];
         Blocks piece = new Blocks(name);
         blocks.add(piece);
+    }
+
+    public void addPieceToMatrix() throws IOException {
+        Blocks piece = blocks.elementAt(blocks.size()-2);
         for (int i = 0; i < 4; i++){
             int x = piece.getCoordinates()[i][0];
             int y = piece.getCoordinates()[i][1];
 
-            if (matrix[x][y] != 0){
+            if (matrix[x][y] != 0 && matrix[x][y] != piece.getNum()){
                 running = false;
                 return;
             }
@@ -108,8 +119,13 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
         }
     }
 
-    // Starting Board
+    public void nextPiece() throws IOException {
+        addPieceToBlocks();
+        visNext();
+        addPieceToMatrix();
+    }
 
+    // Starting Board
     public void emptyBoard() throws IOException {
         int[][] upDown = new int[28*4][2];
         int[][] leftRight = new int[196][2];
@@ -132,6 +148,61 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
 
         send("Gray",upDown);
         send("Gray",leftRight);
+
+        int[][] nextText = new int[][]{{9,31},{10,31},{11,31},{12,31},{9,32},{9,33},{10,34},{11,34},{12,34},{9,37},
+                {9,38},{10,36},{11,36},{12,36},{11,37},{12,37},{12,38},{9,40},{9,42},{10,41},{11,41},{12,40},{12,42},{9,44},{9,45},{9,46},
+                {10,45},{11,45},{12,45}};
+
+        int[][] visualB = new int[128][2];
+
+        for (int i = 0; i < 16; i++){
+            visualB[i]    = new int[]{14,i+31};
+            visualB[i+16] = new int[]{15,i+31};
+            visualB[i+32] = new int[]{28,i+31};
+            visualB[i+48] = new int[]{29,i+31};
+            visualB[i+64] = new int[]{14+i,31};
+            visualB[i+80] = new int[]{14+i,32};
+            visualB[i+96] = new int[]{14+i,45};
+            visualB[i+112] = new int[]{14+i,46};
+        }
+
+        send("Gray",nextText);
+        send("Gray",visualB);
+    }
+
+    public void clearVis() throws IOException {
+        int[][] square = new int[12*4][2];
+        for (int i = 0; i < 12; i++){
+            square[i] = new int[]{21,i+33};
+            square[i+12] = new int[]{22,i+33};
+            square[i+12*2] = new int[]{23,i+33};
+            square[i+12*3] = new int[]{24,i+33};
+        }
+
+        send("Black",square);
+    }
+
+    public void visNext() throws IOException {
+        clearVis();
+        int[][] coords = newCoordinates(blocks.lastElement().getCoordinates());
+        String color = "None";
+
+        for (int[] coord: coords){
+            coord[0] += 19;
+            coord[1] += 24;
+        }
+
+        switch (blocks.lastElement().getNum()){
+            case 1 -> color = "Light Blue";
+            case 2 -> color = "Yellow";
+            case 3 -> color = "Blue";
+            case 4 -> color = "Orange";
+            case 5 -> color = "Purple";
+            case 6 -> color = "Red";
+            case 7 -> color = "Green";
+        }
+
+        send(color,coords);
     }
 
     // SCREEN - Coordinates, Clean, Paint
@@ -169,12 +240,14 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
     }
 
     public void cleanPiece() throws IOException{ //Called before, so always cleans the old coordinates.
-        int[][] coords = newCoordinates(blocks.lastElement().getOldCoord());
+        int[][] coords = newCoordinates(blocks.elementAt(blocks.size()-2).getOldCoord());
         send("Black",coords);
     }
 
     public void paintPiece() throws IOException { //Called after, new coordinates.
-        int num = blocks.lastElement().getNum();
+        Blocks piece = blocks.elementAt(blocks.size()-2);
+
+        int num = piece.getNum();
         String color = "None";
 
         switch (num){
@@ -187,7 +260,7 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
             case 7 -> color = "Green";
         }
 
-        int[][] blockC = blocks.lastElement().getCoordinates();
+        int[][] blockC = piece.getCoordinates();
         send(color,newCoordinates(blockC));
     }
 
@@ -195,23 +268,24 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
     //Move Piece
 
     public void movePiece(String direction) throws IOException {
+        Blocks piece = blocks.elementAt(blocks.size()-2);
+
         switch (direction){
-            case "left"  -> blocks.lastElement().moveLeft(matrix);
-            case "right" -> blocks.lastElement().moveRight(matrix);
-            case "down"  -> blocks.lastElement().moveDown(matrix);
-            case "rotate" -> blocks.lastElement().rotate(matrix);
+            case "left"  -> piece.moveLeft(matrix);
+            case "right" -> piece.moveRight(matrix);
+            case "down"  -> piece.moveDown();
+            case "rotate" -> piece.rotate(matrix);
         }
 
-        for (int[] old: blocks.lastElement().getOldCoord())
+        for (int[] old: piece.getOldCoord())
             matrix[old[0]][old[1]] = 0;
-        for (int[] newC: blocks.lastElement().getCoordinates())
-            matrix[newC[0]][newC[1]] = blocks.lastElement().getNum();
+        for (int[] newC: piece.getCoordinates())
+            matrix[newC[0]][newC[1]] = piece.getNum();
 
-        //deleteCompletedLines();
-
-        if (blocks.lastElement().pieceUnder(matrix)){
-            addPiece();
-            blocks.remove(blocks.elementAt(blocks.size()-2)); //delete piece
+        if (piece.pieceUnder(matrix)){
+            deleteCompletedLines();
+            nextPiece();
+            blocks.remove(piece);
         }
 
         cleanPiece();
@@ -220,34 +294,37 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
 
 
     //Completed Lines
-
-    public Vector<Integer> lineCompleted(){
+    public Vector<Integer> linesCompleted(){
         Vector<Integer> res = new Vector<>();
 
-        for (int row = 23; row >= 0; row--){
+        for (int row = 0; row < 24 ; row++){
 
-            if (!Arrays.stream(matrix[row]).anyMatch(i -> i == 0)){
+            if (Arrays.stream(matrix[row]).noneMatch(i -> i ==0))
                 res.add(row);
-                System.out.println("Line completed: " + row);
-            }
 
         } return res;
     }
 
-    public void deleteCompletedLines(){ //Error of blank spaces
-        Vector<Integer> lines = lineCompleted();
+    public void deleteCompletedLines(){
+        Vector<Integer> lines = linesCompleted();
 
         if (lines.isEmpty())
             return;
 
         for (int line: lines){
-            for (int i = line; i>0;--i){
-                matrix[i] = matrix[i-1].clone();
-            } matrix[0] = new int[]{0,0,0,0,0,0,0,0,0,0,0,0};
-        }
+            for (int i = line; i > 0; i--){
+                if (matrix[i].equals(new int[]{0,0,0,0,0,0,0,0,0,0,0,0}))
+                    break;
 
-        try {sendMatrix();}
-        catch (IOException ioException) {ioException.printStackTrace();}
+                matrix[i] = matrix[i-1].clone();
+            }
+        } matrix[0] = new int[]{0,0,0,0,0,0,0,0,0,0,0,0};
+
+        try {
+            sendMatrix();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
     public Vector<int[]> findAllCoordsOfNum(int num){
@@ -257,7 +334,7 @@ public class Tetris implements Runnable{ ///////////////////////////////////////
             for (int j = 0; j < 12; j++){
 
                 if (matrix[i][j] == num)
-                    res.add(new int[]{i,j});
+                    res.add(new int[]{i-1,j});
 
             }
         }
