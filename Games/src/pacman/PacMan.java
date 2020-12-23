@@ -24,6 +24,7 @@ public class PacMan implements Runnable {
     private boolean lose;
     private int[][] dotMatrix;
     private int dotAmount;
+    private int ghostInCage;
 
     private int[] currentPos;
     private int[] lastPos;
@@ -172,6 +173,7 @@ public class PacMan implements Runnable {
         lose = false;
         dotAmount = 0;
         power = false;
+        ghostInCage = 2;
     }
 
 
@@ -219,6 +221,20 @@ public class PacMan implements Runnable {
     }
     public int[][] getDotMatrix() {
         return dotMatrix;
+    }
+    public int getGhostInCage() {
+        return ghostInCage;
+    }
+    public int[] getCurrentPos() {
+        return currentPos;
+    }
+    public boolean getPower() {return power;}
+    public Server getServer() {
+        return server;
+    }
+
+    public void setLose(boolean lose) {
+        this.lose = lose;
     }
 
     // Game Methods
@@ -450,6 +466,17 @@ public class PacMan implements Runnable {
         return false;
     }
 
+    public void checkCageGhosts(Ghost ghost1, Ghost ghost2){
+        int res = 0;
+        if (ghost1.getInCage()){
+            res++;
+        }
+        if (ghost2.getInCage()){
+            res++;
+        }
+        ghostInCage = res;
+    }
+
     // DOTS
 
     public void initListDots(){
@@ -464,7 +491,6 @@ public class PacMan implements Runnable {
             dotMatrix[coords[0]][coords[1]] = 0;
             dotAmount--;
         }
-        System.out.println(dotAmount);
     }
 
 
@@ -482,12 +508,17 @@ public class PacMan implements Runnable {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         PacMan main = new PacMan();
+        Ghost redGhost = new Ghost(main,"Red");
+        Ghost purpleGhost = new Ghost(main,"Purple");
 
         main.drawMap();
         main.drawDots();
         main.movePlayer();   // Initializes Player
-        main.thread.start();
         main.initListDots();
+
+        main.thread.start();
+        redGhost.start();
+        purpleGhost.start();
 
         main.currentKey = 'a';
         main.key = 'a';
@@ -543,6 +574,8 @@ public class PacMan implements Runnable {
                 System.out.println("LOSE");
                 break;
             }
+
+            main.checkCageGhosts(redGhost,purpleGhost);
 
             //System.out.println(main.dotList.size());
 
