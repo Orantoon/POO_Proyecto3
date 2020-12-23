@@ -571,7 +571,7 @@ public class PacMan implements Runnable {
             }
 
             if (main.lose){                 // LOSE
-                System.out.println("LOSE");
+                main.send("Clean",new int[][]{{0,0}});
                 break;
             }
 
