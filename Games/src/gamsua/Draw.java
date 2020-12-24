@@ -75,7 +75,7 @@ public class Draw extends JPanel {
 
         for (int r = 0; r < 50; r++){
             for (int c = 0; c < 50; c++){
-                System.out.println(map[r][c]);
+                //System.out.println(map[r][c]);
                 switch (map[r][c]){
                     case 0 -> g.setColor(Color.BLACK);
                     case 1 -> g.setColor(Color.CYAN);

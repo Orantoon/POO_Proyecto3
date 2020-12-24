@@ -18,6 +18,12 @@ public class Ghost extends Thread{
     private boolean inCage;
     private int changeCode;
 
+    private Vector<int []> blacks = new Vector<>();
+    private Vector<int []> whites = new Vector<>();
+    private Vector<int []> grays = new Vector<>();
+    private Vector<int []> purples = new Vector<>();
+    private Vector<int []> reds = new Vector<>();
+
 
     public Ghost (PacMan pm, String _color) throws IOException {
         pacMan = pm;
@@ -30,33 +36,56 @@ public class Ghost extends Thread{
     }
 
 
-    public void send(String color, int[][] coords) throws IOException {
-        JSONObject Obj = new JSONObject();
-        JSONArray array = new JSONArray();
-
-        for (int[] c: coords)
-            array.put(c);
-
-        Obj.put(color,array);
-        PacMan.getClient().sendJSON(Obj);
-
-        // this.send("Black",new int[][]{lastPos});
-    }   // ++++++++++++++++++
-
-
     public int[] getCurrentPos() {
         return currentPos;
     }
     public boolean getInCage() {return inCage;}
 
 
+    public void send(String color, int[] coords) {
+        if (color == "Black"){
+            blacks.add(coords);
+        }
+        if (color == "Gray"){
+            grays.add(coords);
+        }
+        if (color == "Red"){
+            reds.add(coords);
+        }
+        if (color == "White"){
+            whites.add(coords);
+        }
+        if (color == "Purple"){
+            purples.add(coords);
+        }
+    }
+
+    public void finalSend() throws IOException {
+        if (!blacks.isEmpty())
+            pacMan.send("Black",blacks.toArray(new int[blacks.size()][2]));
+        if (!whites.isEmpty())
+            pacMan.send("White",whites.toArray(new int[whites.size()][2]));
+        if (!grays.isEmpty())
+            pacMan.send("Gray",grays.toArray(new int[grays.size()][2]));
+        if (!reds.isEmpty())
+            pacMan.send("Red",reds.toArray(new int[reds.size()][2]));
+        if (!purples.isEmpty())
+            pacMan.send("Purple",purples.toArray(new int[purples.size()][2]));
+    }
+
+    public void cleanPacks(){
+        blacks = new Vector<>();
+        reds = new Vector<>();
+        whites = new Vector<>();
+        grays = new Vector<>();
+        purples = new Vector<>();
+    }
+
+
     public void cleanGhost() throws IOException {
         if (lastPos == null){
             return;
         }
-
-        Vector<int []> blacks = new Vector<>();
-        Vector<int []> whites = new Vector<>();
 
         if (lastPos[1]+1 <= 49){
             if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+1] == 0){
@@ -133,12 +162,12 @@ public class Ghost extends Thread{
             whites.add(new int[]{lastPos[0]+2,lastPos[1]});
         }
 
-        //Send Functions
-        if (!blacks.isEmpty())
-            this.send("Black",blacks.toArray(new int[blacks.size()][2]));
+        //Send Functions    ===================================================================
+        //if (!blacks.isEmpty())
+        //    this.send("Black",blacks.toArray(new int[blacks.size()][2]));
 
-        if (!whites.isEmpty())
-            this.send("White",whites.toArray(new int[whites.size()][2]));
+        //if (!whites.isEmpty())
+        //    this.send("White",whites.toArray(new int[whites.size()][2]));
 
 
         //System.out.println("=========");
@@ -158,85 +187,85 @@ public class Ghost extends Thread{
         switch (code) {
             case 1 -> {
                 if (currentPos[1] + 1 <= 49) {
-                    this.send(bColor, new int[][]{{currentPos[0], currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+1}});
+                    this.send(bColor, new int[]{currentPos[0], currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+1});
                 }
                 if (currentPos[1] + 2 <= 49) {
-                    this.send("White", new int[][]{{currentPos[0], currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]+2}});
+                    this.send("White", new int[]{currentPos[0], currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]+2});
                 }
                 if (currentPos[1] - 1 >= 0) {
-                    this.send("White", new int[][]{{currentPos[0], currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]-1}});
+                    this.send("White", new int[]{currentPos[0], currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]-1});
                 }
-                this.send(bColor, new int[][]{currentPos});
-                this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]}});
-                this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]}});
+                this.send(bColor, currentPos);
+                this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]});
+                this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]});
             }
             case 2 -> {
                 if (currentPos[1] + 1 <= 49) {
-                    this.send(bColor, new int[][]{{currentPos[0], currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+1}});
+                    this.send(bColor, new int[]{currentPos[0], currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+1});
                 }
                 if (currentPos[1] + 2 <= 49) {
-                    this.send("White", new int[][]{{currentPos[0]+1, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]+2}});
+                    this.send("White", new int[]{currentPos[0]+1, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]+2});
                 }
                 if (currentPos[1] - 1 >= 0) {
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]-1}});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]-1});
                 }
-                this.send(bColor, new int[][]{currentPos});
-                this.send("White", new int[][]{{currentPos[0]+1, currentPos[1]}});
-                this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]}});
+                this.send(bColor, currentPos);
+                this.send("White", new int[]{currentPos[0]+1, currentPos[1]});
+                this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]});
             }
             case 3 -> {
                 if (currentPos[1] + 1 <= 49) {
-                    this.send(bColor, new int[][]{{currentPos[0], currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+1}});
+                    this.send(bColor, new int[]{currentPos[0], currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+1});
                 }
                 if (currentPos[1] + 2 <= 49) {
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]+2}});
-                    this.send("White", new int[][]{{currentPos[0]+2, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]+2}});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]+2});
+                    this.send("White", new int[]{currentPos[0]+2, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]+2});
                 }
                 if (currentPos[1] - 1 >= 0) {
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]-1}});
-                    this.send("White", new int[][]{{currentPos[0]+2, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]-1}});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]-1});
+                    this.send("White", new int[]{currentPos[0]+2, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]-1});
                 }
-                this.send(bColor, new int[][]{currentPos});
-                this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]}});
-                this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]}});
+                this.send(bColor, currentPos);
+                this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]});
+                this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]});
             }
             case 4 -> {
                 if (currentPos[1] + 1 <= 49) {
-                    this.send(bColor, new int[][]{{currentPos[0], currentPos[1]+1}});
-                    this.send("White", new int[][]{{currentPos[0]+1, currentPos[1]+1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+1}});
+                    this.send(bColor, new int[]{currentPos[0], currentPos[1]+1});
+                    this.send("White", new int[]{currentPos[0]+1, currentPos[1]+1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+1});
                 }
                 if (currentPos[1] + 2 <= 49) {
-                    this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]+2}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]+2}});
+                    this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]+2});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]+2});
                 }
                 if (currentPos[1] - 1 >= 0) {
-                    this.send("White", new int[][]{{currentPos[0]+1, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]-1}});
-                    this.send(bColor, new int[][]{{currentPos[0]+3, currentPos[1]-1}});
+                    this.send("White", new int[]{currentPos[0]+1, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]-1});
+                    this.send(bColor, new int[]{currentPos[0]+3, currentPos[1]-1});
                 }
-                this.send(bColor, new int[][]{currentPos});
-                this.send(bColor, new int[][]{{currentPos[0]+1, currentPos[1]}});
-                this.send(bColor, new int[][]{{currentPos[0]+2, currentPos[1]}});
+                this.send(bColor, currentPos);
+                this.send(bColor, new int[]{currentPos[0]+1, currentPos[1]});
+                this.send(bColor, new int[]{currentPos[0]+2, currentPos[1]});
             }
         }
     }
@@ -351,8 +380,9 @@ public class Ghost extends Thread{
 
     public void freeFromCage() throws InterruptedException, IOException {
         if (color.equals("Purple")){
-            while (pacMan.getGhostInCage() == 2){
+            while (pacMan.getGhostInCage() <= 2){
                 //sleep(1);
+                //System.out.println(pacMan.getGhostInCage());
             }
             sleep(3000);
             directMove(new int[] {23,24});

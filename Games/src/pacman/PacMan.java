@@ -667,6 +667,11 @@ public class PacMan implements Runnable {
 
             main.checkCageGhosts(redGhost,purpleGhost);
 
+            redGhost.finalSend();
+            purpleGhost.finalSend();
+            redGhost.cleanPacks();
+            purpleGhost.cleanPacks();
+
             //System.out.println(main.dotList.size());
 
             //To test the screen
