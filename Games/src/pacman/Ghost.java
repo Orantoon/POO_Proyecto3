@@ -23,6 +23,7 @@ public class Ghost extends Thread{
     private Vector<int []> grays = new Vector<>();
     private Vector<int []> purples = new Vector<>();
     private Vector<int []> reds = new Vector<>();
+    private Vector<int []> oranges = new Vector<>();
 
     private Vector<int[]> allPos = new Vector<>();
 
@@ -73,6 +74,8 @@ public class Ghost extends Thread{
             pacMan.send("Red",reds.toArray(new int[reds.size()][2]));
         if (!purples.isEmpty())
             pacMan.send("Purple",purples.toArray(new int[purples.size()][2]));
+        if (!oranges.isEmpty())
+            pacMan.send("Orange",oranges.toArray(new int[oranges.size()][2]));
     }
 
     public void cleanPacks() {
@@ -81,6 +84,7 @@ public class Ghost extends Thread{
         whites = new Vector<>();
         grays = new Vector<>();
         purples = new Vector<>();
+        oranges = new Vector<>();
     }
 
 
@@ -97,83 +101,139 @@ public class Ghost extends Thread{
             if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+1] == 0){
                 blacks.add(new int[]{lastPos[0],lastPos[1]+1});
             }else{
-                whites.add(new int[] {lastPos[0],lastPos[1]+1});
+                if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+1] == 1){
+                    whites.add(new int[] {lastPos[0],lastPos[1]+1});
+                }else{
+                    oranges.add(new int[] {lastPos[0],lastPos[1]+1});
+                }
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+1] == 0){
                 blacks.add(new int[]{lastPos[0]+1,lastPos[1]+1});
             }else{
-                whites.add(new int[]{lastPos[0]+1,lastPos[1]+1});
+                if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+1] == 1){
+                    whites.add(new int[] {lastPos[0]+1,lastPos[1]+1});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+1,lastPos[1]+1});
+                }
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]+1] == 0){
                 blacks.add(new int[]{lastPos[0]+2,lastPos[1]+1});
             }else{
-                whites.add(new int[]{lastPos[0]+2,lastPos[1]+1});
+                if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]+1] == 1){
+                    whites.add(new int[] {lastPos[0]+2,lastPos[1]+1});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+2,lastPos[1]+1});
+                }
             }
         }
         if (lastPos[1]+2 <= 49){
             if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+2] == 0){
                 blacks.add(new int[]{lastPos[0],lastPos[1]+2});
             }else{
-                whites.add(new int[]{lastPos[0],lastPos[1]+2});
+                if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+2] == 1){
+                    whites.add(new int[] {lastPos[0],lastPos[1]+2});
+                }else{
+                    oranges.add(new int[] {lastPos[0],lastPos[1]+2});
+                }
             }
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+2] == 0){
                 blacks.add(new int[]{lastPos[0]+1,lastPos[1]+2});
             }else{
-                whites.add(new int[]{lastPos[0]+1,lastPos[1]+2});
+                if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+2] == 1){
+                    whites.add(new int[] {lastPos[0]+1,lastPos[1]+2});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+1,lastPos[1]+2});
+                }
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]+2] == 0){
                 blacks.add(new int[]{lastPos[0]+2,lastPos[1]+2});
             }else{
-                whites.add(new int[]{lastPos[0]+2,lastPos[1]+2});
+                if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]+2] == 1){
+                    whites.add(new int[] {lastPos[0]+2,lastPos[1]+2});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+2,lastPos[1]+2});
+                }
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+3][lastPos[1]+2] == 0){
                 blacks.add(new int[]{lastPos[0]+3,lastPos[1]+2});
             }else{
-                whites.add(new int[]{lastPos[0]+3,lastPos[1]+2});
+                if (pacMan.getDotMatrix()[lastPos[0]+3][lastPos[1]+2] == 1){
+                    whites.add(new int[] {lastPos[0]+3,lastPos[1]+2});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+3,lastPos[1]+2});
+                }
             }
         }
         if (lastPos[1]-1 >= 0){
             if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]-1] == 0){
                 blacks.add(new int[]{lastPos[0],lastPos[1]-1});
             }else{
-                whites.add(new int[]{lastPos[0],lastPos[1]-1});
+                if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]-1] == 1){
+                    whites.add(new int[] {lastPos[0],lastPos[1]-1});
+                }else{
+                    oranges.add(new int[] {lastPos[0],lastPos[1]-1});
+                }
             }
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]-1] == 0){
                 blacks.add(new int[]{lastPos[0]+1,lastPos[1]-1});
             }else{
-                whites.add(new int[]{lastPos[0]+1,lastPos[1]-1});
+                if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]-1] == 1){
+                    whites.add(new int[] {lastPos[0]+1,lastPos[1]-1});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+1,lastPos[1]-1});
+                }
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]-1] == 0){
                 blacks.add(new int[]{lastPos[0]+2,lastPos[1]-1});
             }else{
-                whites.add(new int[]{lastPos[0]+2,lastPos[1]-1});
+                if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]-1] == 1){
+                    whites.add(new int[] {lastPos[0]+2,lastPos[1]-1});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+2,lastPos[1]-1});
+                }
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+3][lastPos[1]-1] == 0){
                 blacks.add(new int[]{lastPos[0]+3,lastPos[1]-1});
             }else{
-                whites.add(new int[]{lastPos[0]+3,lastPos[1]-1});
+                if (pacMan.getDotMatrix()[lastPos[0]+3][lastPos[1]-1] == 1){
+                    whites.add(new int[] {lastPos[0]+3,lastPos[1]-1});
+                }else{
+                    oranges.add(new int[] {lastPos[0]+3,lastPos[1]-1});
+                }
             }
         }
         if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]] == 0){
             blacks.add(new int[]{lastPos[0],lastPos[1]});
         }else{
-            whites.add(new int[]{lastPos[0],lastPos[1]});
+            if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]] == 1){
+                whites.add(new int[] {lastPos[0],lastPos[1]});
+            }else{
+                oranges.add(new int[] {lastPos[0],lastPos[1]});
+            }
         }
         if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]] == 0){
             blacks.add(new int[]{lastPos[0]+1,lastPos[1]});
         }else{
-            whites.add(new int[]{lastPos[0]+1,lastPos[1]});
+            if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]] == 1){
+                whites.add(new int[] {lastPos[0]+1,lastPos[1]});
+            }else{
+                oranges.add(new int[] {lastPos[0]+1,lastPos[1]});
+            }
         }
         if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]] == 0){
             blacks.add(new int[]{lastPos[0]+2,lastPos[1]});
         }else{
-            whites.add(new int[]{lastPos[0]+2,lastPos[1]});
+            if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]] == 1){
+                whites.add(new int[] {lastPos[0]+2,lastPos[1]});
+            }else{
+                oranges.add(new int[] {lastPos[0]+2,lastPos[1]});
+            }
         }
 
         //Send Functions    ===================================================================

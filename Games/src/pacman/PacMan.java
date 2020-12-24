@@ -31,6 +31,7 @@ public class PacMan implements Runnable {
     private int code;   // code: 0 = NONE, 1 = UP, 2 = RIGHT, 3 = DOWN, 4 = LEFT
     private boolean open;
     private boolean power;  // If true, can eat ghosts
+    private int powerCont;
 
 
     // Constructor
@@ -118,6 +119,8 @@ public class PacMan implements Runnable {
 
         dotMatrix = new int[][] {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0},
+                {0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -160,10 +163,8 @@ public class PacMan implements Runnable {
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                {0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0},
+                {0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
                 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         };
@@ -451,7 +452,25 @@ public class PacMan implements Runnable {
             this.send("White",new int[][]{{coords[1],coords[0]}});
         }
         // SPECIAL DOTS +++
+        this.send("Orange",new int[][]{{2,2}});
+        this.send("Orange",new int[][]{{2,3}});
+        this.send("Orange",new int[][]{{3,2}});
+        this.send("Orange",new int[][]{{3,3}});
 
+        this.send("Orange",new int[][]{{2,46}});
+        this.send("Orange",new int[][]{{2,47}});
+        this.send("Orange",new int[][]{{3,46}});
+        this.send("Orange",new int[][]{{3,47}});
+
+        this.send("Orange",new int[][]{{46,2}});
+        this.send("Orange",new int[][]{{47,2}});
+        this.send("Orange",new int[][]{{46,3}});
+        this.send("Orange",new int[][]{{47,3}});
+
+        this.send("Orange",new int[][]{{46,46}});
+        this.send("Orange",new int[][]{{46,47}});
+        this.send("Orange",new int[][]{{47,46}});
+        this.send("Orange",new int[][]{{47,47}});
     }
 
     public boolean isInMap(int[] pos) {
@@ -481,6 +500,8 @@ public class PacMan implements Runnable {
             dotMatrix[coords[1]][coords[0]] = 1;
             dotAmount++;
         }
+
+
     }
 
     public void eatDots(int[] coords){
@@ -488,7 +509,22 @@ public class PacMan implements Runnable {
             dotMatrix[coords[0]][coords[1]] = 0;
             dotAmount--;
         }
+        if (dotMatrix[coords[0]][coords[1]] == 2){
+            dotMatrix[coords[0]][coords[1]] = 0;
+            power = true;
+            powerCont = 60;
+        }
     }
+
+    public void updatePower(){
+        if (powerCont == 0){
+            power = false;
+        }
+        if (powerCont > 0){
+            powerCont--;
+        }
+    }
+
 
     //Win & Lose Screens
     public void gameOver() throws IOException{
@@ -664,6 +700,8 @@ public class PacMan implements Runnable {
                     Thread.sleep(Integer.MAX_VALUE);
                 }
             }
+
+            main.updatePower();
 
             main.checkCageGhosts(redGhost,purpleGhost);
 
