@@ -63,13 +63,8 @@ public class Ghost extends Thread{
     }
 
     public void finalSend() throws IOException {
-        if (!blacks.isEmpty()){
+        if (!blacks.isEmpty())
             pacMan.send("Black",blacks.toArray(new int[blacks.size()][2]));
-            /*if (color == "Red"){
-                System.out.println(Arrays.deepToString(blacks.toArray(new int[blacks.size()][2])));
-            }*/
-        }
-
         if (!whites.isEmpty())
             pacMan.send("White",whites.toArray(new int[whites.size()][2]));
         if (!grays.isEmpty())
@@ -404,12 +399,15 @@ public class Ghost extends Thread{
                 //sleep(1);
                 System.out.println(pacMan.getGhostInCage());
             }
+            drawGhost();
             sleep(3000);
             directMove(new int[] {23,24});
             directMove(new int[] {18,24});
         }
         if (color.equals("Red")){
-            sleep(5000);
+            sleep(4000);
+            drawGhost();
+            sleep(1000);
             directMove(new int[] {23,24});
             directMove(new int[] {18,24});
         }
@@ -497,6 +495,11 @@ public class Ghost extends Thread{
             }
 
             pacManCollision();
+
+            whites.add(new int[] {22,23});
+            whites.add(new int[] {22,24});
+            whites.add(new int[] {22,25});
+            whites.add(new int[] {22,26});
         }
     }
 }
