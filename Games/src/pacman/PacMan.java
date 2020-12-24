@@ -246,10 +246,7 @@ public class PacMan implements Runnable {
             return;
         }
         if (lastPos[1]+1 <= 49){
-            this.send("Black",new int[][]{{lastPos[0],lastPos[1]+1}});
-            this.send("Black",new int[][]{{lastPos[0]+1,lastPos[1]+1}});
-            this.send("Black",new int[][]{{lastPos[0]+2,lastPos[1]+1}});
-            this.send("Black",new int[][]{{lastPos[0]+3,lastPos[1]+1}});
+            this.send("Black",new int[][]{{lastPos[0],lastPos[1]+1},{lastPos[0]+1,lastPos[1]+1},{lastPos[0]+2,lastPos[1]+1},{lastPos[0]+3,lastPos[1]+1}});
 
             eatDots(new int[]{lastPos[0],lastPos[1]+1});
             eatDots(new int[]{lastPos[0]+1,lastPos[1]+1});

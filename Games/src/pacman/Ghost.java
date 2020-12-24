@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Vector;
 
 public class Ghost extends Thread{
     private PacMan pacMan;
@@ -53,80 +54,93 @@ public class Ghost extends Thread{
         if (lastPos == null){
             return;
         }
+
+        Vector<int []> blacks = new Vector<>();
+        Vector<int []> whites = new Vector<>();
+
         if (lastPos[1]+1 <= 49){
             if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+1] == 0){
-                this.send("Black",new int[][]{{lastPos[0],lastPos[1]+1}});
+                blacks.add(new int[]{lastPos[0],lastPos[1]+1});
             }else{
-                this.send("White",new int[][]{{lastPos[0],lastPos[1]+1}});
+                whites.add(new int[] {lastPos[0],lastPos[1]+1});
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+1] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+1,lastPos[1]+1}});
+                blacks.add(new int[]{lastPos[0]+1,lastPos[1]+1});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+1,lastPos[1]+1}});
+                whites.add(new int[]{lastPos[0]+1,lastPos[1]+1});
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]+1] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+2,lastPos[1]+1}});
+                blacks.add(new int[]{lastPos[0]+2,lastPos[1]+1});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+2,lastPos[1]+1}});
+                whites.add(new int[]{lastPos[0]+2,lastPos[1]+1});
             }
         }
         if (lastPos[1]+2 <= 49){
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+2] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+1,lastPos[1]+2}});
+                blacks.add(new int[]{lastPos[0]+1,lastPos[1]+2});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+1,lastPos[1]+2}});
+                whites.add(new int[]{lastPos[0]+1,lastPos[1]+2});
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]+2] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+2,lastPos[1]+2}});
+                blacks.add(new int[]{lastPos[0]+2,lastPos[1]+2});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+2,lastPos[1]+2}});
+                whites.add(new int[]{lastPos[0]+2,lastPos[1]+2});
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+3][lastPos[1]+2] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+3,lastPos[1]+2}});
+                blacks.add(new int[]{lastPos[0]+3,lastPos[1]+2});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+3,lastPos[1]+2}});
+                whites.add(new int[]{lastPos[0]+3,lastPos[1]+2});
             }
         }
         if (lastPos[1]-1 >= 0){
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]-1] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+1,lastPos[1]-1}});
+                blacks.add(new int[]{lastPos[0]+1,lastPos[1]-1});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+1,lastPos[1]-1}});
+                whites.add(new int[]{lastPos[0]+1,lastPos[1]-1});
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]-1] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+2,lastPos[1]-1}});
+                blacks.add(new int[]{lastPos[0]+2,lastPos[1]-1});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+2,lastPos[1]-1}});
+                whites.add(new int[]{lastPos[0]+2,lastPos[1]-1});
             }
 
             if (pacMan.getDotMatrix()[lastPos[0]+3][lastPos[1]-1] == 0){
-                this.send("Black",new int[][]{{lastPos[0]+3,lastPos[1]-1}});
+                blacks.add(new int[]{lastPos[0]+3,lastPos[1]-1});
             }else{
-                this.send("White",new int[][]{{lastPos[0]+3,lastPos[1]-1}});
+                whites.add(new int[]{lastPos[0]+3,lastPos[1]-1});
             }
         }
         if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]] == 0){
-            this.send("Black",new int[][]{{lastPos[0],lastPos[1]}});
+            blacks.add(new int[]{lastPos[0],lastPos[1]});
         }else{
-            this.send("White",new int[][]{{lastPos[0],lastPos[1]}});
+            whites.add(new int[]{lastPos[0],lastPos[1]});
         }
 
         if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]] == 0){
-            this.send("Black",new int[][]{{lastPos[0]+1,lastPos[1]}});
+            blacks.add(new int[]{lastPos[0]+1,lastPos[1]});
         }else{
-            this.send("White",new int[][]{{lastPos[0]+1,lastPos[1]}});
+            whites.add(new int[]{lastPos[0]+1,lastPos[1]});
         }
 
         if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]] == 0){
-            this.send("Black",new int[][]{{lastPos[0]+2,lastPos[1]}});
+            blacks.add(new int[]{lastPos[0]+2,lastPos[1]});
         }else{
-            this.send("White",new int[][]{{lastPos[0]+2,lastPos[1]}});
+            whites.add(new int[]{lastPos[0]+2,lastPos[1]});
         }
+
+        //Send Functions
+        if (!blacks.isEmpty())
+            this.send("Black",blacks.toArray(new int[blacks.size()][2]));
+
+        if (!whites.isEmpty())
+            this.send("White",whites.toArray(new int[whites.size()][2]));
+
+
         //System.out.println("=========");
         //System.out.println("r: " + lastPos[0]+2);
         //System.out.println("c: " + lastPos[1]);
