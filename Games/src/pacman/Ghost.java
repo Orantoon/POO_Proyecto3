@@ -24,6 +24,8 @@ public class Ghost extends Thread{
     private Vector<int []> purples = new Vector<>();
     private Vector<int []> reds = new Vector<>();
 
+    private Vector<int[]> allPos = new Vector<>();
+
 
     public Ghost (PacMan pm, String _color) throws IOException {
         pacMan = pm;
@@ -400,7 +402,7 @@ public class Ghost extends Thread{
         if (color.equals("Purple")){
             while (pacMan.getGhostInCage() >= 2){
                 //sleep(1);
-                //System.out.println(pacMan.getGhostInCage());
+                System.out.println(pacMan.getGhostInCage());
             }
             sleep(3000);
             directMove(new int[] {23,24});
@@ -428,7 +430,23 @@ public class Ghost extends Thread{
     }
 
     public void pacManCollision(){
-        if (Arrays.equals(currentPos,pacMan.getCurrentPos())){
+        if (Arrays.equals(new int[] {currentPos[0],currentPos[1]},new int[] {pacMan.getCurrentPos()[0]+3,pacMan.getCurrentPos()[1]})||
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]},new int[] {pacMan.getCurrentPos()[0]+2,pacMan.getCurrentPos()[1]})||
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]},new int[] {pacMan.getCurrentPos()[0]+1,pacMan.getCurrentPos()[1]})||
+
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]})||
+
+                Arrays.equals(new int[] {currentPos[0]+3,currentPos[1]},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]})||
+                Arrays.equals(new int[] {currentPos[0]+2,currentPos[1]},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]})||
+                Arrays.equals(new int[] {currentPos[0]+1,currentPos[1]},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]})||
+
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]-1},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]+2})||
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]-1},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]+1})||
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]-1},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]})||
+
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]+2},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]-1})||
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]+1},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]-1})||
+                Arrays.equals(new int[] {currentPos[0],currentPos[1]},new int[] {pacMan.getCurrentPos()[0],pacMan.getCurrentPos()[1]-1})){
             if (pacMan.getPower()){
                 goToCage();
             }else{
