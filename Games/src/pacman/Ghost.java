@@ -61,8 +61,13 @@ public class Ghost extends Thread{
     }
 
     public void finalSend() throws IOException {
-        if (!blacks.isEmpty())
+        if (!blacks.isEmpty()){
             pacMan.send("Black",blacks.toArray(new int[blacks.size()][2]));
+            /*if (color == "Red"){
+                System.out.println(Arrays.deepToString(blacks.toArray(new int[blacks.size()][2])));
+            }*/
+        }
+
         if (!whites.isEmpty())
             pacMan.send("White",whites.toArray(new int[whites.size()][2]));
         if (!grays.isEmpty())
@@ -73,7 +78,7 @@ public class Ghost extends Thread{
             pacMan.send("Purple",purples.toArray(new int[purples.size()][2]));
     }
 
-    public void cleanPacks(){
+    public void cleanPacks() {
         blacks = new Vector<>();
         reds = new Vector<>();
         whites = new Vector<>();
@@ -82,7 +87,11 @@ public class Ghost extends Thread{
     }
 
 
-    public void cleanGhost() throws IOException {
+    public void cleanGhost() {
+        /*if (color == "Red"){
+            System.out.println(Arrays.toString(lastPos));
+        }*/
+
         if (lastPos == null){
             return;
         }
@@ -107,6 +116,11 @@ public class Ghost extends Thread{
             }
         }
         if (lastPos[1]+2 <= 49){
+            if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]+2] == 0){
+                blacks.add(new int[]{lastPos[0],lastPos[1]+2});
+            }else{
+                whites.add(new int[]{lastPos[0],lastPos[1]+2});
+            }
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]+2] == 0){
                 blacks.add(new int[]{lastPos[0]+1,lastPos[1]+2});
             }else{
@@ -126,6 +140,11 @@ public class Ghost extends Thread{
             }
         }
         if (lastPos[1]-1 >= 0){
+            if (pacMan.getDotMatrix()[lastPos[0]][lastPos[1]-1] == 0){
+                blacks.add(new int[]{lastPos[0],lastPos[1]-1});
+            }else{
+                whites.add(new int[]{lastPos[0],lastPos[1]-1});
+            }
             if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]-1] == 0){
                 blacks.add(new int[]{lastPos[0]+1,lastPos[1]-1});
             }else{
@@ -149,13 +168,11 @@ public class Ghost extends Thread{
         }else{
             whites.add(new int[]{lastPos[0],lastPos[1]});
         }
-
         if (pacMan.getDotMatrix()[lastPos[0]+1][lastPos[1]] == 0){
             blacks.add(new int[]{lastPos[0]+1,lastPos[1]});
         }else{
             whites.add(new int[]{lastPos[0]+1,lastPos[1]});
         }
-
         if (pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]] == 0){
             blacks.add(new int[]{lastPos[0]+2,lastPos[1]});
         }else{
@@ -176,7 +193,7 @@ public class Ghost extends Thread{
         //System.out.println(pacMan.getDotMatrix()[lastPos[0]+2][lastPos[1]]);
     }
 
-    public void drawGhost() throws IOException {
+    public void drawGhost() {
         cleanGhost();
         String bColor;
         if (pacMan.getPower()){
@@ -272,6 +289,7 @@ public class Ghost extends Thread{
 
     public void moveGhost() throws InterruptedException, IOException {
         Thread.sleep(100);
+        cleanGhost();
         switch (code){
             case 0:
                 lastPos = null;
@@ -380,7 +398,7 @@ public class Ghost extends Thread{
 
     public void freeFromCage() throws InterruptedException, IOException {
         if (color.equals("Purple")){
-            while (pacMan.getGhostInCage() <= 2){
+            while (pacMan.getGhostInCage() >= 2){
                 //sleep(1);
                 //System.out.println(pacMan.getGhostInCage());
             }
